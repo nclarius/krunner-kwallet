@@ -48,18 +48,18 @@ KWalletRunner::KWalletRunner(QObject *parent, const KPluginMetaData &data, const
 void KWalletRunner::match(KRunner::RunnerContext &context)
 {
     const QString query = context.query();
-    // Make sure command starts with "kwallet"
-    if (query.startsWith(searchString) || query.startsWith(shortSearchString)) {
-        const QString searchTerm = query.split(QChar(' '), Qt::SkipEmptyParts).at(1);
+    QStringList tokens = query.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
+    if (query.startsWith(searchString) || query.startsWith(shortSearchString) || true) {
         for (const QString &folderName : wallet->folderList()) {
             wallet->setFolder(folderName);
             for (const QString &entryName : wallet->entryList()) {
-                if (entryName.contains(searchTerm, Qt::CaseInsensitive)) {
+                if (std::all_of(tokens.begin(), tokens.end(), [&](const QString &token) {
+    return entryName.contains(token, Qt::CaseInsensitive);})) {
                     KRunner::QueryMatch match(this);
 #if KRUNNER_VERSION < QT_VERSION_CHECK(5, 113, 0)
                     match.setType(KRunner::QueryMatch::ExactMatch);
 #else
-                    match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Highest);
+                    match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Moderate);
 #endif
                     match.setIconName(QStringLiteral("kwalletmanager"));
                     match.setText(entryName);
