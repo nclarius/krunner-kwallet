@@ -62,6 +62,7 @@ void KWalletRunner::match(KRunner::RunnerContext &context)
                     match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Highest);
 #endif
                     match.setIconName(QStringLiteral("kwalletmanager"));
+                    match.setMatchCategory(QStringLiteral("Wallet Entries"));
                     match.setText(entryName);
                     match.setSubtext(folderName);
                     match.setData(QStringList({folderName, entryName}));
