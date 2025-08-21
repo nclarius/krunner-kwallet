@@ -62,6 +62,7 @@ void KWalletRunner::match(KRunner::RunnerContext &context)
                     match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Moderate);
 #endif
                     match.setIconName(QStringLiteral("kwalletmanager"));
+                    match.setMatchCategory(QStringLiteral("Wallet Entries"));
                     match.setText(entryName);
                     QString password;
                     wallet->readPassword(entryName, password);
