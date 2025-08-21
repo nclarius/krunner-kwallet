@@ -54,7 +54,7 @@ void KWalletRunner::match(KRunner::RunnerContext &context)
             wallet->setFolder(folderName);
             for (const QString &entryName : wallet->entryList()) {
                 if (std::all_of(tokens.begin(), tokens.end(), [&](const QString &token) {
-    return entryName.contains(token, Qt::CaseInsensitive);})) {
+                                return entryName.contains(token, Qt::CaseInsensitive);})) {
                     KRunner::QueryMatch match(this);
 #if KRUNNER_VERSION < QT_VERSION_CHECK(5, 113, 0)
                     match.setType(KRunner::QueryMatch::ExactMatch);
