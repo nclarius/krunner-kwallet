@@ -55,6 +55,13 @@ void KWalletRunner::match(KRunner::RunnerContext &context)
             wallet->setFolder(folderName);
             for (const QString &entryName : wallet->entryList()) {
                 if (entryName.contains(searchTerm, Qt::CaseInsensitive)) {
+                    if (const auto matches = context.matches(); 
+                        std::any_of(matches.begin(), matches.end(),
+                        [&](const KRunner::QueryMatch &existingMatch) {
+                            return existingMatch.data() == QStringList({folderName, entryName});
+                        })) {
+                        continue;
+                    }
                     KRunner::QueryMatch match(this);
 #if KRUNNER_VERSION < QT_VERSION_CHECK(5, 113, 0)
                     match.setType(KRunner::QueryMatch::ExactMatch);
