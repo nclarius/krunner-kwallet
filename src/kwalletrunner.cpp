@@ -143,16 +143,19 @@ void KWalletRunner::run(const KRunner::RunnerContext & /*context*/, const KRunne
 
     else if (!match.selectedAction()) {
         // Default case
-        wallet->setFolder(match.subtext());
-        const Wallet::EntryType entryType = wallet->entryType(match.text());
+        const QStringList matchData = match.data().toStringList();
+        QString folderName = matchData.at(0);
+        QString entryName = matchData.at(1);
+        wallet->setFolder(folderName);
+        const Wallet::EntryType entryType = wallet->entryType(entryName);
         if (entryType == Wallet::Password) {
             QString password;
-            wallet->readPassword(match.text(), password);
+            wallet->readPassword(entryName, password);
             setClipboardPassword(password);
             return;
         } else if (entryType == Wallet::Map) {
             QMap<QString, QString> resMap;
-            wallet->readMap(match.text(), resMap);
+            wallet->readMap(entryName, resMap);
             if (resMap.size() == 1) {
                 setClipboardPassword(resMap.values().at(0));
                 return;
