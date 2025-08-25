@@ -50,7 +50,9 @@ void KWalletRunner::match(KRunner::RunnerContext &context)
     const QString query = context.query();
     QStringList tokens = query.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
     if (query.startsWith(searchString) || query.startsWith(shortSearchString) || true) {
-        for (const QString &folderName : wallet->folderList()) {
+        QStringList folders = wallet->folderList();
+        folders.removeDuplicates();
+        for (const QString &folderName : folders) {
             wallet->setFolder(folderName);
             for (const QString &entryName : wallet->entryList()) {
                 if (std::all_of(tokens.begin(), tokens.end(), [&](const QString &token) {
